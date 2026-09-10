@@ -6,22 +6,19 @@
   <meta name="theme-color" content="#071011">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="description" content="Pulse Rhumato v8 — PDF UNESS locaux, QCM personnalisés et répétition espacée.">
-  <title>Pulse Rhumato v8</title>
+  <meta name="description" content="Pulse Rhumato v9 — cours UNESS pré-extraits, QCM et répétition espacée.">
+  <title>Pulse Rhumato v9</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="courses-v4.css">
   <link rel="stylesheet" href="styles-v6.css">
   <link rel="stylesheet" href="visuals.css">
   <link rel="stylesheet" href="styles-v7.css">
   <link rel="stylesheet" href="pdf-pane-patch.css">
-  <link rel="stylesheet" href="styles-v8.css">
+  <style>.v9Extract{margin-top:16px}.v9Extract details{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 14px;margin:8px 0;background:rgba(255,255,255,.025)}.v9Extract summary{cursor:pointer;font-weight:800}.v9Extract li{margin:8px 0;line-height:1.45}.v9Extract ul,.v9Extract ol{padding-left:22px}.v9Notice{padding:12px;border-radius:12px;background:rgba(85,230,193,.08);border:1px solid rgba(85,230,193,.2)}</style>
 </head>
 <body>
   <div id="root"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-  <script>if(window.pdfjsLib)pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';</script>
   <script src="courses.js"></script>
   <script src="questions-v4.js"></script>
   <script src="pdf-manifest-socle.js"></script>
@@ -30,8 +27,6 @@
   <script src="visual-patch.js"></script>
   <script src="app-v7-extension.js"></script>
   <script src="pdf-pane-patch.js"></script>
-  <script src="uness-local-v8.js"></script>
-  <script src="uness-qcm-runtime-v8.js"></script>
-  <script src="uness-bridge-v8.js"></script>
+  <script src="uness-static-v9.js"></script>
 </body>
 </html>
