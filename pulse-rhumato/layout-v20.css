@@ -1,0 +1,32 @@
+/* v20 — full-width course workspace + slide-first outline */
+.courseDetail.v20wide{display:block!important;width:100%!important;max-width:none!important;min-width:0!important}
+.courseDetail.v20wide>.detailMain,.courseDetail .detailMain.v20wideMain{width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important;padding:clamp(16px,1.5vw,26px)!important}
+.courseDetail.v20wide .v15course{width:100%!important;max-width:none!important;grid-template-columns:minmax(0,1.82fr) minmax(370px,.98fr)!important;gap:14px!important;align-items:start!important}
+.courseDetail.v20wide .v15reader{min-width:0!important;width:100%!important}
+.courseDetail.v20wide .v15pdf{width:100%!important;min-width:0!important;min-height:calc(100vh - 210px)!important}
+.courseDetail.v20wide .v15pdfBody{min-height:calc(100vh - 285px)!important}
+.courseDetail.v20wide .v17viewer{height:calc(100vh - 285px)!important;min-height:600px!important}
+.courseDetail.v20wide .v17stage{min-height:0!important;padding:12px!important;align-items:center!important;justify-content:center!important;background:linear-gradient(180deg,#16211f,#101817)!important}
+.courseDetail.v20wide .v17stage canvas{max-width:none!important;max-height:none!important;box-shadow:0 18px 52px rgba(0,0,0,.4)!important}
+.courseDetail.v20wide .v15summary{width:100%!important;min-width:0!important;max-height:calc(100vh - 170px)!important;position:sticky!important;top:12px!important}
+.courseDetail.v20wide .v15course.v19summaryHidden{grid-template-columns:1fr!important}
+.courseDetail.v20wide .v15course.v19summaryHidden .v15reader{max-width:1500px;margin-inline:auto;width:100%!important}
+.courseDetail.v20wide .v15course.v19summaryHidden .v17stage{padding-inline:clamp(16px,4vw,64px)!important}
+
+.v20outline{margin:14px 15px 15px;border:1px solid rgba(85,230,193,.2);border-radius:16px;background:linear-gradient(180deg,rgba(8,28,27,.76),rgba(6,19,19,.55));overflow:hidden}
+.v20outline>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;background:rgba(85,230,193,.055);border-bottom:1px solid transparent}
+.v20outline[open]>summary{border-bottom-color:rgba(255,255,255,.06)}
+.v20outline>summary::-webkit-details-marker,.v20slide>summary::-webkit-details-marker{display:none}
+.v20outline>summary span{display:flex;flex-direction:column;gap:2px;min-width:0}.v20outline>summary b{font-size:12.5px;color:#effbf8}.v20outline>summary small{font-size:10.5px;color:#88aaa4}.v20outline>summary em{font-style:normal;color:#6fe5c8;transition:.2s}.v20outline[open]>summary em{transform:rotate(180deg)}
+.v20outlineBody{padding:7px;max-height:48vh;overflow:auto;scrollbar-width:thin}.v20loading{padding:14px;color:#8ca8a2;font-size:11px}
+.v20slides{display:grid;gap:5px}.v20slide{border:1px solid rgba(255,255,255,.06);border-radius:12px;background:rgba(255,255,255,.018);overflow:hidden}.v20slide[open]{border-color:rgba(85,230,193,.16);background:rgba(85,230,193,.035)}
+.v20slide>summary{list-style:none;display:grid;grid-template-columns:31px minmax(0,1fr) 18px;gap:9px;align-items:center;padding:9px 10px;cursor:pointer}.v20page{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#39e8c1,#14aa91);color:#041a17;font-size:10px;font-weight:950;box-shadow:0 0 0 3px rgba(57,232,193,.06)}
+.v20slideText{min-width:0;display:flex;flex-direction:column;gap:2px}.v20slideText b{font-size:11.7px;line-height:1.3;color:#e8f5f1;white-space:normal}.v20slideText small{font-size:10px;line-height:1.35;color:#88aaa4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v20slide>summary em{font-style:normal;color:#7ba099}.v20slide[open]>summary em{transform:rotate(180deg)}.v20slide p{margin:0;padding:0 12px 11px 50px;font-size:11.25px;line-height:1.48;color:#bfd0cc}
+.v20outline.compact{margin:14px 0 0}.v20outline.compact .v20outlineBody{max-height:310px}.v20qOutline{margin-top:10px}
+
+/* keep QCM split premium and use the available viewport */
+.v18StudyGrid{width:100%!important;max-width:none!important;grid-template-columns:minmax(0,1.32fr) minmax(440px,.78fr)!important;gap:14px!important}.v18StudyPdf{min-width:0!important}.v18StudyPdf .v17stage{align-items:center!important}.v18StudyGrid>.rpPlanQuestion{min-width:0!important;width:100%!important}
+
+@media (min-width:1500px){.courseDetail.v20wide .v15course{grid-template-columns:minmax(0,1.92fr) minmax(430px,.92fr)!important}.courseDetail.v20wide .v17viewer{min-height:680px!important}}
+@media (max-width:1180px){.courseDetail.v20wide .v15course,.v18StudyGrid{grid-template-columns:1fr!important}.courseDetail.v20wide .v15summary{position:static!important;max-height:none!important}.courseDetail.v20wide .v17viewer{height:68vh!important;min-height:540px!important}.v20outlineBody{max-height:420px}}
+@media (max-width:700px){.courseDetail.v20wide>.detailMain,.courseDetail .detailMain.v20wideMain{padding:14px!important}.courseDetail.v20wide .v17viewer{height:62vh!important;min-height:470px!important}.v20slideText small{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.v20outlineBody{max-height:360px}.v20slide>summary{grid-template-columns:28px minmax(0,1fr) 16px}}
