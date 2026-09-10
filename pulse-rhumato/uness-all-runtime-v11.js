@@ -1,0 +1,91 @@
+(()=>{
+const DOCS=()=>window.PULSE_UNESS_ALL||[];
+const norm=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/œ/g,'oe').replace(/[^a-z0-9]+/g,' ').trim();
+const STOP=new Set('de du des la le les un une et en au aux a d l pour dans sur par avec cours cofer v revu final ok audio son phase socle approfondissement diagnostic traitement prise charge therapeutique savoir faire'.split(' '));
+const toks=s=>norm(s).split(' ').filter(x=>x.length>2&&!STOP.has(x)&&!/^[0-9]+$/.test(x));
+const ALIASES={
+'constantin suivi evaluation en rhumatologie':'',
+'falgARONE immunomodulation traitements immunomodulateurs':'43 falgarone timmmod',
+'chevalier arthrose':'27 chevalier',
+'cortet diagnostics differentiels osteoporose':'09 cortet',
+'marcelli fractures vertebrales diagnostic et traitement':'08 marcelli fv',
+'bouvard lesions appareil musculo squelettique diagnostic et prise en charge':'10 bouvard',
+'prati ppr rhumatologie inflammatoire':'18 prati',
+'felten gottenberg evaluer activite de la pr':'42 felten gottenberg',
+'daien kinesitherapie pr':'41 daien',
+'ruyssen suivi spondyloarthrite':'45 ruyssen',
+'dernis spa ttt et kine':'46 dernis',
+'qcm diagnostiquer une spa recente':'44 qcm diagnostiquer spa recente',
+'legrand lombosciatique':'31a legrand sciatique',
+'legrand nevralgie cervicobrachiale':'31b legrand ncb',
+'foltz kinesitherapie au cours dune lomboradiculalgie':'32 foltz',
+'foltz prescription et surveillance reeducation':'38 foltz prescription',
+'senbel reeducation readaptation':'36 senbel',
+'marcelli metastase osseuse':'14 marcelli metastase',
+'degboe laroche traiter une lesion osseuse secondaire':'11 degboe laroche',
+'clay poignet':'06 clay poignet',
+'clay cheville':'07 clay cheville',
+'legoff ponction de genou':'04 legoff ponction genou',
+'legoff ponction depaule':'05 legoff ponction epaule',
+'ea colchicine et interactions':'24 ea colchicine',
+'pascart lafforgue arthrite microcristalline':'22 pascart lafforgue',
+'richette arthrites microcristallines revu pr audio vf':'23 richette',
+'debiais hypercalcemies':'12 debiais',
+'devauchelle arterite a cellules geantes':'17 devauchelle',
+'arnaud corticotherapie v4':'20 arnaud corticotherapie',
+'richez diagnostiquer un lupus':'16 richez diagnostiquer lupus',
+'richez surveiller lupus erythemateux systemique':'19 richez surveiller lupus',
+'cornec vascularites':'15 cornec vascularites',
+'guggenbuhl diagnostic des infections osteoarticulaires':'01 guggenbuhl',
+'coiffier traitement des infections osteoarticulaires':'02 coiffier',
+'truchetet marie elise arthrite recente':'03 truchetet',
+'diagnostiquer une pr debutante':'40 diagnostiquer pr debutante',
+'remis coude v2':'remis coude v2',
+'remis epaule ok v4':'remis epaule ok v4',
+'remis genou v2':'remis genou v2',
+'remis main poignet v4':'remis main poignet v4',
+'remis cheville pied':'remis cheville pied',
+'fiche hanche coupes normales':'fiche hanche',
+'cours poignet diego':'cours poignet diego',
+'pathologie de hanche diego':'pathologie de hanche diego',
+'pathologie de lepaule diego mode de compatibilite':'pathologie de lepaule diego',
+'pathologie du genou diego':'pathologie du genou diego',
+'coude diego 2016':'coude diego 2016',
+'reglage doppler cofer':'reglage doppler',
+'reglage mode b cofer':'reglage mode b',
+'application mode b cofer':'application mode b',
+'bases physiques echographie emc':'bases physiques echographie',
+'semiologie echographique de la peau cofer':'semiologie echographique de la peau',
+'semiologie echographique du muscle cofer':'semiologie echographique du muscle',
+'semiologie echographique articulations et bourses cofer':'semiologie echographique articulations et bourses',
+'semiologie echographique des tendons et autres tissus fibreux cofer':'semiologie echographique des tendons',
+'semiologie echographique os cartilage et nerfs cofer':'semiologie echographique os cartilage nerfs',
+'artefacts cofer':'artefacts cofer',
+'semiologie echographique introduction':'semio intro',
+'mot dintroduction general echographie':'mot dintroduction general',
+'fiche genou echoguidage abord transversal':'fiche genou echoguidage',
+'fiche cheville echoguidage abord transversal':'fiche cheville echoguidage',
+'fiche poignet echoguidage abord longitudinal':'fiche poignet echoguidage',
+'fiches pratiques ponction infiltration echoguidee gleno humerale':'fiches pratiques ponction infiltration echoguidee',
+'technique dechoguidage dans ou en dehors du plan':'technique echoguidage',
+'asepsie pour les gestes en rhumatologie':'asepsie pour les gestes',
+'anesthesie et rhumatologie interventionnelle':'anesthesie rhumatologie interventionnelle',
+'quel choix daiguilles en rhumatologie interventionnelle':'quel choix aiguilles',
+'comment faire un compte rendu dinfiltration de qualite':'compte rendu infiltration',
+'gestion des anticoagulants en rhumatologie interventionnelle':'2020 gestion anticoagulants',
+'validation du module coupes normales par le referent dechographie':'validation module coupes normales',
+'validation du module coupes pathologiques par le referent':'validation module coupes pathologiques'
+};
+function aliasFor(title){const n=norm(title);for(const [k,v] of Object.entries(ALIASES)){if(n===norm(k)||n.includes(norm(k))||norm(k).includes(n))return v}return ''}
+function score(title,file){const a=toks(title),b=toks(file);if(!a.length||!b.length)return 0;let s=0;for(const x of a){if(b.includes(x))s+=x.length>=7?4:2;else if(b.some(y=>y.includes(x)||x.includes(y)))s+=1}const nt=norm(title),nf=norm(file);if(nf.includes(nt)||nt.includes(nf.replace(/ pdf$/,'')))s+=20;return s}
+function docFor(title){const docs=DOCS();if(!docs.length)return null;const al=aliasFor(title);if(al){const at=toks(al);let best=null,bs=-1;for(const d of docs){const f=toks(d.f);let sc=at.reduce((n,x)=>n+(f.includes(x)?5:f.some(y=>y.includes(x)||x.includes(y))?2:0),0);if(sc>bs){bs=sc;best=d}}if(bs>0)return best}
+let best=null,bs=0;for(const d of docs){const s=score(title,d.f);if(s>bs){bs=s;best=d}}return bs>=2?best:null}
+function cleanText(t=''){return t.replace(/\u0007/g,'').replace(/І\s*\d+/g,'').replace(/\n{3,}/g,'\n\n').trim()}
+function isEcho(c){return /écho|echo|doppler|poignet|genou|épaule|epaule|hanche|coude|cheville|sonde/i.test((c?.module||'')+' '+(c?.title||''))}
+function renderExtract(c,d){const txt=cleanText(d?.x||'');return `<section class="unessUniversal"><div class="unessUniversalHead"><div><div class="eyebrow">Support UNESS • extrait réel du PDF</div><h3>${esc(c.title)}</h3><small>${esc(d?.f||'Support non apparié')}</small></div><span class="sourcePill">${d?'PDF reconnu':'à vérifier'}</span></div>${d?`<div class="unessReading"><pre>${esc(txt)}</pre></div><div class="unessHints"><details open><summary>Comment travailler ce cours</summary><p>${isEcho(c)?'Support très visuel : retiens surtout les repères anatomiques, la position de sonde, la coupe de référence, les artefacts et les critères pathologiques. Le texte ci-dessus est un extrait OCR/texte du PDF ; les figures du support restent importantes.':'Lis l’extrait en identifiant successivement : présentation clinique, diagnostic/bilan, traitement et surveillance. Les formulations restent issues du support fourni.'}</p></details><details><summary>Source</summary><p>Texte extrait du fichier <b>${esc(d.f)}</b> fourni dans ton ZIP UNESS. Aucun contenu Notion n’est chargé.</p></details></div>`:`<div class="policyNotice"><b>Support non apparié automatiquement.</b><br>Le titre reste dans la bibliothèque mais aucun extrait d’un autre cours n’est affiché par sécurité.</div>`}</section>`}
+function enhanceCourse(){const main=document.querySelector('.courseDetail .detailMain');if(!main)return;const title=main.querySelector('h2')?.textContent?.trim();const c=(window.PULSE_COURSES||[]).find(x=>x.title===title);if(!c)return;main.querySelectorAll('.staticCourse,.unessUniversal').forEach(x=>x.remove());main.querySelectorAll('.courseQuestions,.qmenu,.questionsMenu').forEach(x=>x.remove());const d=docFor(c.title);main.insertAdjacentHTML('beforeend',renderExtract(c,d));const aside=document.querySelector('.courseDetail aside');if(aside)aside.style.display='none';}
+function cleanLibraryLinks(){document.querySelectorAll('a[href*="notion.com"]').forEach(a=>{if(a.closest('.courseDetail'))a.remove()});}
+function enhance(){enhanceCourse();cleanLibraryLinks()}
+new MutationObserver(enhance).observe(document.documentElement,{childList:true,subtree:true});setTimeout(enhance,80);
+window.PULSE_UNESS_MATCH=docFor;
+})();
