@@ -1,0 +1,16 @@
+(()=>{
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const key=s=>String(s||'').trim();
+const cache=new Map();
+async function rowsFor(title){if(cache.has(title))return cache.get(title);const p=window.PULSE_OUTLINE_V20?.extractSlides?.(title);const rows=p?await p:[];cache.set(title,rows||[]);return rows||[]}
+function card(title,mode){const el=document.createElement('details');el.className=`v27Outline v27Outline--${mode}`;el.dataset.v27Title=title;el.innerHTML=`<summary><span class="v27Icon">☰</span><span class="v27Head"><b>Plan du cours</b><small>Chargement du plan par diapositive…</small></span><span class="v27Chevron">⌄</span></summary><div class="v27Body"><div class="v27Loading">Analyse du support…</div></div>`;return el}
+async function hydrate(el,title){if(el.dataset.v27Hydrated==='1')return;el.dataset.v27Hydrated='1';const rows=await rowsFor(title);if(!el.isConnected)return;const small=el.querySelector('.v27Head small'),body=el.querySelector('.v27Body');if(small)small.textContent=rows.length?`${rows.length} diapositives • titre + idée clé`:'Plan indisponible';if(!body)return;if(!rows.length){body.innerHTML='<div class="v27Loading">Plan indisponible pour ce support.</div>';return}body.innerHTML=`<div class="v27Rows">${rows.map(r=>`<div class="v27Row"><span>${r.page}</span><div><b>${esc(r.t)}</b><small>${esc(r.k)}</small></div></div>`).join('')}</div>`}
+function courseTitle(){return key(document.querySelector('.courseDetail .v15summary .v15sumHead p')?.textContent||document.querySelector('.courseDetail h2')?.textContent)}
+function installCourse(){const course=document.querySelector('.courseDetail .v15course');if(!course)return;const title=courseTitle();if(!title)return;let box=document.querySelector('.courseDetail > .v27OutlineCourse,.courseDetail .v27OutlineCourse');if(box&&box.dataset.v27Title!==title){box.remove();box=null}if(!box){box=card(title,'course');box.classList.add('v27OutlineCourse');const main=document.querySelector('.courseDetail .detailMain');const target=main?.querySelector('.v15course')||course;target.parentNode.insertBefore(box,target);hydrate(box,title)}}
+function qcmTitle(){return key(document.querySelector('.seriesBar b')?.textContent?.replace(/^Plan\s*•\s*/i,''))}
+function installQcm(){const grid=document.querySelector('.v18StudyGrid');if(!grid)return;const title=qcmTitle();if(!title)return;let box=document.querySelector('.v27OutlineQcm');if(box&&box.dataset.v27Title!==title){box.remove();box=null}if(!box){box=card(title,'qcm');box.classList.add('v27OutlineQcm');grid.parentNode.insertBefore(box,grid);hydrate(box,title)}}
+function cleanup(){document.querySelectorAll('.v15summary > .v20outline,.rpPlanQuestion .v20qOutline').forEach(x=>x.setAttribute('aria-hidden','true'));if(!document.querySelector('.courseDetail'))document.querySelectorAll('.v27OutlineCourse').forEach(x=>x.remove());if(!document.querySelector('.v18StudyGrid'))document.querySelectorAll('.v27OutlineQcm').forEach(x=>x.remove())}
+let timer;function run(){clearTimeout(timer);timer=setTimeout(()=>{cleanup();installCourse();installQcm()},90)}
+new MutationObserver(run).observe(document.documentElement,{subtree:true,childList:true});setTimeout(run,260);
+window.PULSE_OUTLINE_V27={rowsFor};
+})();
